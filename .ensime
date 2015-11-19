@@ -1,24 +1,24 @@
 (
  :root-dir "/home/ad/fshome2/u2/h/hxiao/Linux/code/der"
  :cache-dir "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/.ensime_cache"
- :name "der"
+ :name "root"
  :java-home "/cs/fs/home/hxiao/software/jdk1.8.0_31"
  :java-flags ("-Xms1024m" "-Xmx1024m" "-XX:ReservedCodeCacheSize=128m" "-XX:MaxMetaspaceSize=256m")
  :reference-source-roots ("/cs/fs/home/hxiao/software/jdk1.8.0_31/src.zip")
- :scala-version "2.10.5"
+ :scala-version "2.11.5"
  :compiler-args nil
  
  :subprojects ((
-   :name "der"
-   :module-name "der"
-   :source-roots ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala-2.10" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/java" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala-2.10" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/java")
-   :target "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/classes"
-   :test-targets ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/test-classes")
+   :name "root"
+   :module-name "root"
+   :source-roots ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/java" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala-2.11" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/java" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala-2.11")
+   :target "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.11/classes"
+   :test-targets ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.11/test-classes")
    :depends-on-modules nil
-   :compile-deps ("/home/hxiao/.sbt/boot/scala-2.10.5/lib/scala-library.jar")
-   :runtime-deps nil
-   :test-deps nil
-   :doc-jars ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/docs/scala-library-2.10.5-javadoc.jar" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/der_2.10-0.1-SNAPSHOT-javadoc.jar")
-   :reference-source-roots ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.10.5-sources.jar")))
+   :compile-deps ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.5.jar" "/home/hxiao/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.2.jar", "/home/hxiao/.ivy2/cache/org.scalatest/scalatest_2.11/jars/scalatest_2.11-2.2.4.jar")
+   :runtime-deps ("/home/hxiao/.ivy2/cache/org.scalatest/scalatest_2.11/jars/scalatest_2.11-2.2.4.jar")
+   :test-deps ("/home/hxiao/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.4.jar" "/home/hxiao/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.2.jar")
+   :doc-jars ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.11/der_2.11-0.1.0-javadoc.jar" "/home/hxiao/.ivy2/cache/org.scalatest/scalatest_2.11/docs/scalatest_2.11-2.2.4-javadoc.jar" "/home/hxiao/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/docs/scala-xml_2.11-1.0.2-javadoc.jar" "/home/hxiao/.ivy2/cache/org.scala-lang/scala-reflect/docs/scala-reflect-2.11.2-javadoc.jar" "/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/docs/scala-library-2.11.5-javadoc.jar")
+   :reference-source-roots ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.11.5-sources.jar" "/home/hxiao/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/srcs/scala-xml_2.11-1.0.2-sources.jar" "/home/hxiao/.ivy2/cache/org.scalatest/scalatest_2.11/srcs/scalatest_2.11-2.2.4-sources.jar" "/home/hxiao/.ivy2/cache/org.scala-lang/scala-reflect/srcs/scala-reflect-2.11.2-sources.jar")))
  
 )

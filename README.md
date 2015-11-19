@@ -14,3 +14,4 @@
 - [Parse huge xml files](http://www.lucasallan.com/2014/12/23/parsing-huge-xml-files-in-scala.html)
 - [Emacs as Scala IDE](http://www.troikatech.com/blog/2014/11/26/ensime-and-emacs-as-a-scala-ide)
 - [Get test resource path](http://stackoverflow.com/questions/23831768/scala-get-file-path-of-file-in-resources-folder)
+- [ScalaTest](http://www.scalatest.org/user_guide/writing_your_first_test)
