@@ -1,0 +1,24 @@
+(
+ :root-dir "/home/ad/fshome2/u2/h/hxiao/Linux/code/der"
+ :cache-dir "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/.ensime_cache"
+ :name "der"
+ :java-home "/cs/fs/home/hxiao/software/jdk1.8.0_31"
+ :java-flags ("-Xms1024m" "-Xmx1024m" "-XX:ReservedCodeCacheSize=128m" "-XX:MaxMetaspaceSize=256m")
+ :reference-source-roots ("/cs/fs/home/hxiao/software/jdk1.8.0_31/src.zip")
+ :scala-version "2.10.5"
+ :compiler-args nil
+ 
+ :subprojects ((
+   :name "der"
+   :module-name "der"
+   :source-roots ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/scala-2.10" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/java" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/main/scala-2.10" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/src/test/java")
+   :target "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/classes"
+   :test-targets ("/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/test-classes")
+   :depends-on-modules nil
+   :compile-deps ("/home/hxiao/.sbt/boot/scala-2.10.5/lib/scala-library.jar")
+   :runtime-deps nil
+   :test-deps nil
+   :doc-jars ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/docs/scala-library-2.10.5-javadoc.jar" "/home/ad/fshome2/u2/h/hxiao/Linux/code/der/target/scala-2.10/der_2.10-0.1-SNAPSHOT-javadoc.jar")
+   :reference-source-roots ("/home/hxiao/.ivy2/cache/org.scala-lang/scala-library/srcs/scala-library-2.10.5-sources.jar")))
+ 
+)
