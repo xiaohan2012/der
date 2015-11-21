@@ -15,3 +15,7 @@
 - [Emacs as Scala IDE](http://www.troikatech.com/blog/2014/11/26/ensime-and-emacs-as-a-scala-ide)
 - [Get test resource path](http://stackoverflow.com/questions/23831768/scala-get-file-path-of-file-in-resources-folder)
 - [ScalaTest](http://www.scalatest.org/user_guide/writing_your_first_test)
+- [Tail recursion](http://oldfashionedsoftware.com/2008/09/27/tail-recursion-basics-in-scala/): very good example
+  - way to tell if tail recursion: if first compute, then recursive call, then it's, otherwise, it's not.
+- [foldLeft and foldRight](http://oldfashionedsoftware.com/2009/07/10/scala-code-review-foldleft-and-foldright/) plus some reminder on tail recursion
+  
