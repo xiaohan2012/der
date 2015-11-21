@@ -18,4 +18,5 @@
 - [Tail recursion](http://oldfashionedsoftware.com/2008/09/27/tail-recursion-basics-in-scala/): very good example
   - way to tell if tail recursion: if first compute, then recursive call, then it's, otherwise, it's not.
 - [foldLeft and foldRight](http://oldfashionedsoftware.com/2009/07/10/scala-code-review-foldleft-and-foldright/) plus some reminder on tail recursion
-  
+- [Chop newline character](http://alvinalexander.com/scala/scala-string-chomp-chop-function-newline-characters)
+- [BufferedWriter and FileWriter in Java](http://stackoverflow.com/questions/12350248/java-difference-between-filewriter-and-bufferedwriter)

@@ -1,5 +1,5 @@
 lazy val commonSettings = Seq(
-  organization := "org.hxiao",
+  organization := "org.hxiao.der",
   version := "0.1.0",
   scalaVersion := "2.11.5"
 )

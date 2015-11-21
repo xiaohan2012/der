@@ -1,4 +1,4 @@
-import org.hxiao.wikipedia.LinkExtractor
+import org.hxiao.der.wikipedia.LinkExtractor
 
 import org.scalatest.FlatSpec
 import org.scalatest.Assertions._

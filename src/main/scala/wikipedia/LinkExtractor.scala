@@ -1,4 +1,4 @@
-package org.hxiao.wikipedia
+package org.hxiao.der.wikipedia
 
 import scala.xml.XML
 
