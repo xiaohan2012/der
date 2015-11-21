@@ -20,3 +20,4 @@
 - [foldLeft and foldRight](http://oldfashionedsoftware.com/2009/07/10/scala-code-review-foldleft-and-foldright/) plus some reminder on tail recursion
 - [Chop newline character](http://alvinalexander.com/scala/scala-string-chomp-chop-function-newline-characters)
 - [BufferedWriter and FileWriter in Java](http://stackoverflow.com/questions/12350248/java-difference-between-filewriter-and-bufferedwriter)
+- [Scala run jar](http://stackoverflow.com/questions/2930146/running-scala-apps-with-java-jar): `scala -cp  target/scala-2.11/der_2.11-0.1.0.jar  org.hxiao.der.util.PageXMLFlattener` 

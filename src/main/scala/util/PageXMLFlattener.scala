@@ -22,4 +22,8 @@ object PageXMLFlattener{
     }
     outputFile.close()
   }
+
+  def main(args: Array[String]) = {
+    process(args(0), args(1))
+  }
 }
