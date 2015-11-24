@@ -1,11 +1,7 @@
 package org.hxiao.der.wikipedia
 
+import org.hxiao.der.wikipedia.classes._
 import scala.xml.Elem
-
-case class Entity(id: Int, title: String)
-case class Anchor(surface: String, title: String)
-case class Link(source_id: Int, target_title: String)
-case class PageInfo(entity: Entity, anchors: List[Anchor], links: List[Link])
 
 object Extractor {
 
@@ -16,28 +12,28 @@ object Extractor {
     )
   }
 
-  def extractPageInfo(page: Elem): PageInfo = {
+  def extractPageInfo(page: Elem): RawPageInfo = {
     val anchors = extractAnchors(page)
     val entity = extractEntityInfo(page)
     val links = packLinks(entity, anchors)
-    PageInfo(entity, anchors, links)
+    RawPageInfo(entity, anchors, links)
   }
 
-  def packLinks(entity: Entity, anchors: List[Anchor]): List[Link] = {
+  def packLinks(entity: Entity, anchors: List[RawAnchor]): List[RawLink] = {
     anchors.map { anchor =>
-      Link(entity.id, anchor.title)
+      RawLink(entity.id, anchor.title)
     }
   }
 
-  def extractAnchors(page: Elem) : List[Anchor] = {
+  def extractAnchors(page: Elem) : List[RawAnchor] = {
     // Extract anchors given a XML page
     val text = (page \\ "text").head.text
 
     val link = """\[\[([^\[\]]+?)(?:\|([^\[\]]+))?\]\]""".r
 
     (link findAllIn text).map( _ match {
-      case link(title, null) => Anchor(title, title)
-      case link(surface, title) => Anchor(surface, title)
+      case link(title, null) => RawAnchor(title, title)
+      case link(surface, title) => RawAnchor(surface, title)
     }).toList
   }
 }

@@ -1,4 +1,5 @@
-import org.hxiao.der.wikipedia.{Extractor, Anchor, Link, Entity, PageInfo}
+import org.hxiao.der.wikipedia.Extractor
+import org.hxiao.der.wikipedia.classes.{Entity, RawAnchor, RawLink, RawPageInfo}
 
 import scala.xml.{XML, Elem}
 import org.scalatest.{FlatSpec, BeforeAndAfter}
@@ -20,7 +21,7 @@ class ExtractorTest extends FlatSpec with BeforeAndAfter {
       anchors.length
     }
     val title = "Brazilian Silicon Valley"
-    assertResult(Anchor(title, title)){
+    assertResult(RawAnchor(title, title)){
       anchors(0)
     }
   }
@@ -38,7 +39,7 @@ class ExtractorTest extends FlatSpec with BeforeAndAfter {
     assertResult(400){
       links.length
     }
-    assertResult(Link(63514, "Brazilian Silicon Valley")){
+    assertResult(RawLink(63514, "Brazilian Silicon Valley")){
       links(0)
     }
   }
