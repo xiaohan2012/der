@@ -67,50 +67,14 @@ object WikipediaProcessor {
     }
   }
 
-  // def apply(xml_path: String, sc: SparkContext) = {
-  //   val page_infos = sc.parallelize(spark.textFile(xml_path)).map (
-  //     line => {
-  //       val page = XML.loadString(line)
-  //       Extractor.extractPageInfo(page)
-  //     }
-  //   ).collect()
-
-  //   // build hash map from entity name to id
-  //   val title2id: HashMap[String, Int] = page_infos.map {
-  //     p => (p.entity.name, p.entity.id)
-  //   }.toMap
-      
-  //   // get anchors, links(titles mapped to id), entity name to id mapping
-
-  //   // unique links
-  //   val links: List[Tuple2[Int, Int]] = page_infos.map {
-  //     p => (p.link.source_id, title2id(p.link.target_title))
-  //   }.distinct()
-
-  //   // title to surface frequency
-  //   val anchors: List[Tuple2[Int, HashMap[String, Int]]] = page_infos.map {
-  //     p => (title2id(p.anchor.title), p.anchor.surface)
-  //   }.groupByKey().map (
-  //     case (id, surfaces) => {
-  //       // count frequency of each surface
-  //       val cnt = surfaces.map( s => (s, 1))
-  //       cnt.reduceByKey(a,b => a+b)        
-  //     }
-  //   )
-
-
-  //   // get frequency
-  //   val commonness: HashMap[Int, HashMap[String, Int]] = {
-  //   }
-
-    
-
-
-    // map the anchor strings to ids
-
-    // save to database
-    // - entity name -> id mapping
-    // - links
-    // - anchors(as well as count)
+  def surface2entityFrequency(anchors: RDD[Anchor]): RDD[(String, Seq[(EntityID, Int)])] = {
+    anchors.groupBy {
+      anchor => anchor.surface
+    }.map {
+      case (s, as) => (
+        (s, as.groupBy(a => a.id).mapValues(_.size).toSeq)
+      )
+    }
+  }
 }
 

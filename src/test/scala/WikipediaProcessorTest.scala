@@ -50,7 +50,6 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     }
 
     // TODO:
-    // - map unpaged articles to some number
     // - redirect normalization
     val links = WikipediaProcessor.normalizeLinks(raw_links, title2id.collectAsMap())
     val expected_links = Array(
@@ -69,20 +68,29 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       anchors.collect().sorted
     }
 
-    // val surface2entity_frequency = WikipediaProcessor.normalizeAnchors(anchors)
-    // expectResult(
-    //   List(
-    //     ("two", List((2, 1), ("Four!!", 1))),
-    //     ("2", List((2, 1))),
-    //     ("II", List((2, 1))),
-    //     ("one", List((1, 1))),
-    //     ("Three", List((3, 1)))
-    //   )
-    // ){
-    //   surface2entity_frequency.collect()
-    // }
+    val surface2entity_frequency = WikipediaProcessor.surface2entityFrequency(anchors)
+    List(
+      ("two", List((2, 1), (WikipediaProcessor.NON_EXIST_ENTITY_ID, 1))),
+      ("2", List((2, 1))),
+      ("II", List((2, 1))),
+      ("one", List((1, 1))),
+      ("Three", List((3, 1)))
+    ).sortBy {
+      case (s, lst) => s
+    }.map {
+      case (s, lst) => {
+        (s, lst.sorted)
+      }
+    } should equal {
+      surface2entity_frequency.collect.toList.sortBy {
+        case (s, lst) => s
+      }.map {
+        case (s, lst) => {
+          (s, lst.toList.sorted)
+        }
+      }
+    }
   }
-  
 
   after {
     if (sc != null) {

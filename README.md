@@ -31,3 +31,5 @@
 - [sorted and sortWith](http://alvinalexander.com/scala/how-sort-scala-sequences-seq-list-array-buffer-vector-ordering-ordered) and [implicit ordering](http://stackoverflow.com/questions/19345030/easy-idiomatic-way-to-define-ordering-for-a-simple-case-class)
 - [ScalaTest should DSL, Matchers](http://www.scalatest.org/user_guide/using_matchers#checkingEqualityWithMatchers)
 - [create a class meanwhile modifying its definition](http://stackoverflow.com/questions/3648870/scala-using-hashmap-with-a-default-value)
+- [spark groupBy](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html#groupBy)
+- [mapValues and frequency calculation](http://stackoverflow.com/questions/12105130/generating-a-frequency-map-for-a-string-in-scala)
