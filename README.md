@@ -33,3 +33,6 @@
 - [create a class meanwhile modifying its definition](http://stackoverflow.com/questions/3648870/scala-using-hashmap-with-a-default-value)
 - [spark groupBy](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html#groupBy)
 - [mapValues and frequency calculation](http://stackoverflow.com/questions/12105130/generating-a-frequency-map-for-a-string-in-scala)
+- [Aho Corasick backed by Solr](http://sujitpal.blogspot.fi/2013/07/dictionary-backed-named-entity.html)
+- Solr
+  - [query syntax](https://wiki.apache.org/solr/CommonQueryParameters#fl)
