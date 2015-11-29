@@ -6,12 +6,34 @@ import scala.collection.immutable.HashMap
 import org.hxiao.der.wikipedia.WikipediaProcessor
 import org.hxiao.der.wikipedia.classes._
 
-class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers {
+class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
+{
 
   private val master = "local[2]"
   private val appName = "example-spark"
 
   private var sc: SparkContext = _
+  
+  // some expected values
+  val expected_title2id = HashMap("One" -> 1, "Two" -> 2, "Three" -> 3)
+
+  val expected_links = Array(
+    Link(1, WikipediaProcessor.NON_EXIST_ENTITY_ID), Link(1, 2), Link(2, 3), Link(3, 2), Link(3, 1)
+  ).sorted
+
+  val expected_surface2entity_frequency = List(
+    ("two", List((2, 1), (WikipediaProcessor.NON_EXIST_ENTITY_ID, 1))),
+    ("2", List((2, 1))),
+    ("II", List((2, 1))),
+    ("one", List((1, 1))),
+    ("Three", List((3, 1)))
+  ).sortBy {
+    case (s, lst) => s
+  }.map {
+    case (s, lst) => {
+      (s, lst.sorted)
+    }
+  }
 
   before {
     val conf = new SparkConf()
@@ -21,9 +43,11 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     sc = new SparkContext(conf)
   }
 
-  "WikipediaProcessor.apply" should "return: - a list of links between articles - surface to entity frequency - entity to id mapping" in {
+  "A list of methods of WikipediaProcessor" should "return: - a list of links between articles - surface to entity frequency - entity to id mapping" in {
     val xml_path = getClass().getResource("1234-example.xml").getPath()
+
     val pageInfo = WikipediaProcessor.collectPageInfo(sc, xml_path)
+
     3 should equal {
       pageInfo.collect().length
     }
@@ -44,17 +68,14 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       raw_anchors.collect().sorted
     )
 
-    val title2id = WikipediaProcessor.collectTitle2Id(pageInfo)
-    HashMap("One" -> 1, "Two" -> 2, "Three" -> 3) should equal {
+    val title2id = WikipediaProcessor.collectTitle2Id(pageInfo)    
+    expected_title2id should equal {
       title2id.collectAsMap()
     }
 
     // TODO:
     // - redirect normalization
     val links = WikipediaProcessor.normalizeLinks(raw_links, title2id.collectAsMap())
-    val expected_links = Array(
-      Link(1, WikipediaProcessor.NON_EXIST_ENTITY_ID), Link(1, 2), Link(2, 3), Link(3, 2), Link(3, 1)
-    ).sorted
     expected_links should equal {
       links.collect().sorted
     }
@@ -69,19 +90,8 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     }
 
     val surface2entity_frequency = WikipediaProcessor.surface2entityFrequency(anchors)
-    List(
-      ("two", List((2, 1), (WikipediaProcessor.NON_EXIST_ENTITY_ID, 1))),
-      ("2", List((2, 1))),
-      ("II", List((2, 1))),
-      ("one", List((1, 1))),
-      ("Three", List((3, 1)))
-    ).sortBy {
-      case (s, lst) => s
-    }.map {
-      case (s, lst) => {
-        (s, lst.sorted)
-      }
-    } should equal {
+    
+    expected_surface2entity_frequency should equal {
       surface2entity_frequency.collect.toList.sortBy {
         case (s, lst) => s
       }.map {
@@ -89,6 +99,44 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
           (s, lst.toList.sorted)
         }
       }
+    }
+
+  }
+
+  "WikipediaProcessor.apply(faked test set)" should "return: title2id, links, surface2entity frequency as expected" in {
+    val xml_path = getClass().getResource("1234-example.xml").getPath()
+    val (title2id, links, surface2entity_frequency) = WikipediaProcessor.apply(sc, xml_path)
+    expected_title2id should equal {
+      title2id
+    }
+
+    expected_links should equal {
+      links.collect().sorted
+    }
+
+    expected_surface2entity_frequency should equal {
+      surface2entity_frequency.collect.toList.sortBy {
+        case (s, lst) => s
+      }.map {
+        case (s, lst) => {
+          (s, lst.toList.sorted)
+        }
+      }
+    }
+  }
+
+  "WikipediaProcessor.apply(real test set)" should "return: title2id, links, surface2entity frequency" in {
+    val xml_path = getClass().getResource("output-head-1000.xml").getPath()
+    val (title2id, links, surface2entity_frequency) = WikipediaProcessor.apply(sc, xml_path)
+    12 should equal {
+      title2id.getOrElse("Anarchism", -1)
+    }
+    99856 should equal {
+      surface2entity_frequency.collect.length
+    }
+
+    138512 should equal {
+      links.collect.length
     }
   }
 

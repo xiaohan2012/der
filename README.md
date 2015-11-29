@@ -1,5 +1,5 @@
-\
-- `xml_split` to split pages into separate files
+# Wikipedia related
+
 - [Wikipedia dump link](https://dumps.wikimedia.org/enwiki/20151102/enwiki-20151102-pages-articles-multistream.xml.bz2)
 
 
@@ -36,3 +36,4 @@
 - [Aho Corasick backed by Solr](http://sujitpal.blogspot.fi/2013/07/dictionary-backed-named-entity.html)
 - Solr
   - [query syntax](https://wiki.apache.org/solr/CommonQueryParameters#fl)
+- [Option type](http://danielwestheide.com/blog/2012/12/19/the-neophytes-guide-to-scala-part-5-the-option-type.html)

@@ -76,5 +76,21 @@ object WikipediaProcessor {
       )
     }
   }
+
+  // return:
+  // 1. title2id mapping
+  // 2. links
+  // 3. surface2entity frequency
+  def apply(sc: SparkContext, xml_path: String): (Map[String, Int], RDD[Link], RDD[(String, Seq[(EntityID, Int)])]) = {
+    val pageInfo = collectPageInfo(sc, xml_path)
+    val raw_links = collectLinks(pageInfo)
+    val raw_anchors = collectAnchors(pageInfo)
+    val title2id = collectTitle2Id(pageInfo).collectAsMap()
+    val links = normalizeLinks(raw_links, title2id)
+    val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
+    val surface2entity_frequency = WikipediaProcessor.surface2entityFrequency(anchors)
+
+    return (title2id, links, surface2entity_frequency)
+  }
 }
 
