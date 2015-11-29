@@ -25,4 +25,15 @@ package object classes {
   case class Link(source_id: EntityID, target_id: EntityID) extends Ordered[Link]{
     def compare(that: Link): Int = (this.source_id, this.target_id) compare (that.source_id, that.target_id)
   }
+
+  case class SurfaceName(name: String, entity_count: Seq[(EntityID, Int)], occurrences: Int) extends Ordered[SurfaceName]{
+    def this(n: String, ec: Seq[(EntityID, Int)]) = {
+      this(n, ec,
+        ec.map(_._2).sum
+      )
+    }
+    
+    def compare(that: SurfaceName) = this.name compare that.name
+
+  }
 }

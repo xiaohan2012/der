@@ -67,13 +67,11 @@ object WikipediaProcessor {
     }
   }
 
-  def surface2entityFrequency(anchors: RDD[Anchor]): RDD[(String, Seq[(EntityID, Int)])] = {
+  def collectSurfaceNames(anchors: RDD[Anchor]): RDD[SurfaceName] = {
     anchors.groupBy {
       anchor => anchor.surface
     }.map {
-      case (s, as) => (
-        (s, as.groupBy(a => a.id).mapValues(_.size).toSeq)
-      )
+      case (s, as) => new SurfaceName(s, as.groupBy(a => a.id).mapValues(_.size).toSeq)
     }
   }
 
@@ -81,16 +79,16 @@ object WikipediaProcessor {
   // 1. title2id mapping
   // 2. links
   // 3. surface2entity frequency
-  def apply(sc: SparkContext, xml_path: String): (Map[String, Int], RDD[Link], RDD[(String, Seq[(EntityID, Int)])]) = {
+  def apply(sc: SparkContext, xml_path: String): (Map[String, Int], RDD[Link], RDD[SurfaceName]) = {
     val pageInfo = collectPageInfo(sc, xml_path)
     val raw_links = collectLinks(pageInfo)
     val raw_anchors = collectAnchors(pageInfo)
     val title2id = collectTitle2Id(pageInfo).collectAsMap()
     val links = normalizeLinks(raw_links, title2id)
     val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
-    val surface2entity_frequency = WikipediaProcessor.surface2entityFrequency(anchors)
+    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
 
-    return (title2id, links, surface2entity_frequency)
+    return (title2id, links, surface_names)
   }
 }
 

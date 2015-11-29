@@ -21,19 +21,15 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers
     Link(1, WikipediaProcessor.NON_EXIST_ENTITY_ID), Link(1, 2), Link(2, 3), Link(3, 2), Link(3, 1)
   ).sorted
 
-  val expected_surface2entity_frequency = List(
-    ("two", List((2, 1), (WikipediaProcessor.NON_EXIST_ENTITY_ID, 1))),
-    ("2", List((2, 1))),
-    ("II", List((2, 1))),
-    ("one", List((1, 1))),
-    ("Three", List((3, 1)))
-  ).sortBy {
-    case (s, lst) => s
-  }.map {
-    case (s, lst) => {
-      (s, lst.sorted)
-    }
-  }
+  val expected_surface_names = List(
+    new SurfaceName("two", List((2, 1), (WikipediaProcessor.NON_EXIST_ENTITY_ID, 1))),
+    new SurfaceName("2", List((2, 1))),
+    new SurfaceName("II", List((2, 1))),
+    new SurfaceName("one", List((1, 1))),
+    new SurfaceName("Three", List((3, 1)))
+  ).sorted.map(
+    s => new SurfaceName(s.name, s.entity_count.sorted, s.occurrences)
+  )
 
   before {
     val conf = new SparkConf()
@@ -89,15 +85,11 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers
       anchors.collect().sorted
     }
 
-    val surface2entity_frequency = WikipediaProcessor.surface2entityFrequency(anchors)
+    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
     
-    expected_surface2entity_frequency should equal {
-      surface2entity_frequency.collect.toList.sortBy {
-        case (s, lst) => s
-      }.map {
-        case (s, lst) => {
-          (s, lst.toList.sorted)
-        }
+    expected_surface_names should equal {
+      surface_names.collect.toList.sorted.map {
+        s => new SurfaceName(s.name, s.entity_count.toList.sorted, s.occurrences)
       }
     }
 
@@ -105,7 +97,7 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers
 
   "WikipediaProcessor.apply(faked test set)" should "return: title2id, links, surface2entity frequency as expected" in {
     val xml_path = getClass().getResource("1234-example.xml").getPath()
-    val (title2id, links, surface2entity_frequency) = WikipediaProcessor.apply(sc, xml_path)
+    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
     expected_title2id should equal {
       title2id
     }
@@ -114,25 +106,21 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers
       links.collect().sorted
     }
 
-    expected_surface2entity_frequency should equal {
-      surface2entity_frequency.collect.toList.sortBy {
-        case (s, lst) => s
-      }.map {
-        case (s, lst) => {
-          (s, lst.toList.sorted)
-        }
-      }
+    expected_surface_names should equal {
+      surface_names.collect.toList.sorted.map(
+        s => new SurfaceName(s.name, s.entity_count.toList.sorted, s.occurrences)
+      )
     }
   }
 
   "WikipediaProcessor.apply(real test set)" should "return: title2id, links, surface2entity frequency" in {
     val xml_path = getClass().getResource("output-head-1000.xml").getPath()
-    val (title2id, links, surface2entity_frequency) = WikipediaProcessor.apply(sc, xml_path)
+    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
     12 should equal {
       title2id.getOrElse("Anarchism", -1)
     }
     99856 should equal {
-      surface2entity_frequency.collect.length
+      surface_names.collect.length
     }
 
     138512 should equal {
