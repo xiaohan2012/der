@@ -16,5 +16,6 @@ libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
   "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
   "org.apache.spark" %% "spark-core" % "1.5.2",
-  "org.apache.solr" % "solr-solrj" % "4.0.0"
+  "org.apache.solr" % "solr-solrj" % "5.3.1",
+  "org.apache.solr" % "solr-core" % "5.3.1"
 )

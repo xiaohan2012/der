@@ -35,7 +35,14 @@
 - [mapValues and frequency calculation](http://stackoverflow.com/questions/12105130/generating-a-frequency-map-for-a-string-in-scala)
 - [NER using Solr](http://sujitpal.blogspot.fi/2013/07/dictionary-backed-named-entity.html)
 - Solr
+  - [API: add document programically](https://wiki.apache.org/solr/Solrj)
   - [query syntax](https://wiki.apache.org/solr/CommonQueryParameters#fl)
 - [Option type](http://danielwestheide.com/blog/2012/12/19/the-neophytes-guide-to-scala-part-5-the-option-type.html)
 - [Exception handling and pattern matching](http://danielwestheide.com/blog/2012/12/26/the-neophytes-guide-to-scala-part-6-error-handling-with-try.html)
 - [When to use new operator?](https://stackoverflow.com/questions/9727637/new-keyword-in-scala/9727784#9727784)
+- [split into chunks(grouped)](http://stackoverflow.com/questions/7459174/split-list-into-multiple-lists-with-fixed-number-of-elements)
+- If `XX is not member of XXX` appears over and over though you tried many versions of packages, use `jar tf XX.jar | grep` to check.
+- [JavaConversions](http://www.scala-lang.org/api/current/index.html#scala.collection.JavaConversions$)
+- [testOnly in sbt](http://stackoverflow.com/questions/11159953/scalatest-in-sbt-is-there-a-way-to-run-a-single-test-without-tags)
+- [Core definition(new) in Solr](https://cwiki.apache.org/confluence/display/solr/Defining+core.properties)
+- [Solr schema data types](https://cwiki.apache.org/confluence/display/solr/Field+Types+Included+with+Solr)
