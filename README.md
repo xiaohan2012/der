@@ -46,3 +46,4 @@
 - [testOnly in sbt](http://stackoverflow.com/questions/11159953/scalatest-in-sbt-is-there-a-way-to-run-a-single-test-without-tags)
 - [Core definition(new) in Solr](https://cwiki.apache.org/confluence/display/solr/Defining+core.properties)
 - [Solr schema data types](https://cwiki.apache.org/confluence/display/solr/Field+Types+Included+with+Solr)
+- [ScalaTest almost equal](http://stackoverflow.com/questions/29938653/scalatest-check-for-almost-equal-for-floats-and-objects-containing-floats/29940436#29940436)

@@ -1,3 +1,4 @@
+import org.scalactic.TolerantNumerics
 import org.scalatest._
 import org.scalatest.Assertions._
 
@@ -12,6 +13,10 @@ import org.hxiao.der.util.SolrUtility
 
 class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
   private var server: EmbeddedSolrServer = _
+
+  val epsilon = 1e-4f
+  implicit val doubleEq = TolerantNumerics.tolerantDoubleEquality(epsilon)
+
   before {
     val solr_dir = getClass().getResource("solr").getPath()
     val container = new CoreContainer(solr_dir);
@@ -34,16 +39,20 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
     val params = new ModifiableSolrParams();
     params.add(CommonParams.Q, "*:*");
     val res = server.query(params);
-    val results = List(res.getResults)
+    val results = res.getResults
 
     5 should equal {
-      results.length
+      results.getNumFound
     }
-
-    results foreach {
-      d => {
-        println(d)
-      }
+    val first_doc = results.get(0)
+    "two" should equal {
+       first_doc.get("surface_name")
+    }
+    3 should equal {
+       first_doc.get("occurrences")
+    }
+    0.47712125471966244 should === {
+       first_doc.get("log_occurrences")
     }
   }
 
