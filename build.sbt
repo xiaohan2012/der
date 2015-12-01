@@ -19,3 +19,7 @@ libraryDependencies ++= Seq(
   "org.apache.solr" % "solr-solrj" % "5.3.1",
   "org.apache.solr" % "solr-core" % "5.3.1"
 )
+
+
+// ensure only one spark context created at each time
+parallelExecution in Test := false

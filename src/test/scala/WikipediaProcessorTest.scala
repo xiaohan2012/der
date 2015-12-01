@@ -6,11 +6,10 @@ import scala.collection.immutable.HashMap
 import org.hxiao.der.wikipedia.WikipediaProcessor
 import org.hxiao.der.wikipedia.classes._
 
-class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
-{
+class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers {
 
   private val master = "local[2]"
-  private val appName = "example-spark"
+  private val appName = "WikipediaProcessorSpec"
 
   private var sc: SparkContext = _
   

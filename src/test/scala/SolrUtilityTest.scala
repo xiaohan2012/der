@@ -2,32 +2,39 @@ import org.scalactic.TolerantNumerics
 import org.scalatest._
 import org.scalatest.Assertions._
 
-import org.hxiao.der.wikipedia.classes._
+import org.apache.spark._
+
 import org.apache.solr.core.CoreContainer
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer
 import org.apache.solr.common.params.ModifiableSolrParams
 import org.apache.solr.common.params.CommonParams
 import org.apache.solr.common.SolrDocumentList
 
-
+import org.hxiao.der.wikipedia.classes._
 import org.hxiao.der.util.SolrUtility
 
 
 class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
-  private var server: EmbeddedSolrServer = _
+  private var solr_server: EmbeddedSolrServer = _
+
+  private val master = "local[2]"
+  private val appName = "SolrUtilitySpec"
+  private var sc: SparkContext = _
 
   val epsilon = 1e-4f
   implicit val doubleEq = TolerantNumerics.tolerantDoubleEquality(epsilon)
 
-  private var solr_util: SolrUtility = _
 
   before {
-    val solr_dir = getClass().getResource("solr").getPath()
-    val container = new CoreContainer(solr_dir);
-    container.load();
-    server = new EmbeddedSolrServer(container, "test")
+    val conf = new SparkConf()
+      .setMaster(master)
+      .setAppName(appName)
 
-    solr_util = new SolrUtility(server)
+    sc = new SparkContext(conf)
+
+    val solr_dir = getClass().getResource("solr").getPath()
+    val solr_core_name = "test"
+    solr_server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
 
     val surface_names = List(
       new SurfaceName("two", List((2, 2), (-1, 1))),
@@ -36,9 +43,8 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
       new SurfaceName("one", List((1, 1))),
       new SurfaceName("Three", List((3, 1)))
     )
-
-    solr_util.addSurfaceNames(surface_names, 2)
-
+    val solr_util = new SolrUtility(solr_server)
+    solr_util.addSurfaceNamesFromRDD(sc.parallelize(surface_names))
   }
 
   def check(results: SolrDocumentList) = {
@@ -54,11 +60,12 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
     }
   }
 
+
   "SolorUtility.addSurfaceNames" should "index 5 surface names in Solr" in {
 
     val params = new ModifiableSolrParams();
     params.add(CommonParams.Q, "*:*");
-    val res = server.query(params);
+    val res = solr_server.query(params);
     val results = res.getResults
     5 should equal {
       results.getNumFound
@@ -69,7 +76,7 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
   "Querying 'two'" should "return 1 surface name" in {
     val params = new ModifiableSolrParams();
     params.add(CommonParams.Q, "surface_name:two");
-    val res = server.query(params);
+    val res = solr_server.query(params);
     val results = res.getResults
 
     1 should equal {
@@ -79,10 +86,13 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
   }
 
   after {
-    if (server != null) {
+    if (solr_server != null) {
       // delete the collection
-      server.deleteByQuery( "*:*" )
-      server.shutdown()
+      solr_server.deleteByQuery( "*:*" )
+      solr_server.shutdown()
+    }
+    if (sc != null) {
+      sc.stop()
     }
   }
 }

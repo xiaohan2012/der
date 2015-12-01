@@ -47,3 +47,7 @@
 - [Core definition(new) in Solr](https://cwiki.apache.org/confluence/display/solr/Defining+core.properties)
 - [Solr schema data types](https://cwiki.apache.org/confluence/display/solr/Field+Types+Included+with+Solr)
 - [ScalaTest almost equal](http://stackoverflow.com/questions/29938653/scalatest-check-for-almost-equal-for-floats-and-objects-containing-floats/29940436#29940436)
+- [API: Spark 1.5.2 for Scala](http://spark.apache.org/docs/latest/api/scala/index.html)
+- [Spark partition opeation(quite a lot)](https://spark.apache.org/docs/1.0.0/api/java/org/apache/spark/rdd/RDD.html)
+- [RDD.toLocalIterator](https://spark.apache.org/docs/1.0.0/api/java/org/apache/spark/rdd/RDD.html#toLocalIterator%28%29)
+- [sequence test execution in SBT(create one spark context at a time)](http://stackoverflow.com/questions/15145987/how-to-run-specifications-sequentially)
