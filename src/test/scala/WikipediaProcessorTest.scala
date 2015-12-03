@@ -113,16 +113,16 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
   }
 
   "WikipediaProcessor.apply(real test set)" should "return: title2id, links, surface2entity frequency" in {
-    val xml_path = getClass().getResource("output-head-1000.xml").getPath()
+    val xml_path = getClass().getResource("output-head-100.xml").getPath()
     val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
     12 should equal {
       title2id.getOrElse("Anarchism", -1)
     }
-    99856 should equal {
+    7638 should equal {
       surface_names.collect.length
     }
 
-    138512 should equal {
+    8041 should equal {
       links.collect.length
     }
   }

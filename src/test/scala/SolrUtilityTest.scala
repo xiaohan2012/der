@@ -62,7 +62,6 @@ class SolrUtilitySpec extends FlatSpec with BeforeAndAfter with Matchers {
 
 
   "SolorUtility.addSurfaceNames" should "index 5 surface names in Solr" in {
-
     val params = new ModifiableSolrParams();
     params.add(CommonParams.Q, "*:*");
     val res = solr_server.query(params);

@@ -23,7 +23,6 @@ class SolrUtility(server: EmbeddedSolrServer) {
   def addSurfaceNamesFromRDD(surface_names: RDD[SurfaceName]) = {
     surface_names.toLocalIterator.foreach {
       sf => {
-        println("****", sf)
         val doc = new SolrInputDocument()
         doc.addField("surface_name", sf.name)
         doc.addField("occurrences", sf.occurrences)
