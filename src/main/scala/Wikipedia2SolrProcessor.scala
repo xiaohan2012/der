@@ -9,28 +9,27 @@ import org.hxiao.der.util.SolrUtility
 
 
 object Wikipedia2SolrProcessor {
-  def run(solr_dir: String, core_name: String, xml_path: String) = {
-    // spark context
-    val conf = new SparkConf()
-      .setMaster("local[2]")
-      .setAppName("Wikipedia2SolrProcessor")
-
-    val sc = new SparkContext(conf)
-
+  def run(sc: SparkContext, solr_dir: String, core_name: String, xml_path: String) = {
     // solr server
     val server = SolrUtility.createEmbeddedSolrServer(solr_dir, core_name)
-
 
     val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
 
     val solr_util = new SolrUtility(server)
     solr_util.addSurfaceNamesFromRDD(surface_names)
 
-
     server.shutdown()
-    sc.stop()
   }
+
   def main(args: Array[String]) = {
-    
+    val conf = new SparkConf().setAppName("Wikipedia2SolrProcessor")
+    val sc = new SparkContext(conf)
+    val solr_dir = args(1)
+    val core_name = args(2)
+    val xml_path = args(3)
+    println(s"solr_dir: ${solr_dir}")
+    println(s"core_name: ${core_name}")
+    println(s"xml_path: ${xml_path}")
+    run(sc, solr_dir, core_name, xml_path)
   }
 }

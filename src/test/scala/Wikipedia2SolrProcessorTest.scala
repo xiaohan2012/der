@@ -2,6 +2,9 @@ import org.scalatest._
 import org.scalatest.Assertions._
 import org.scalactic.TolerantNumerics
 
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer
 import org.apache.solr.common.params.ModifiableSolrParams
 import org.apache.solr.common.params.CommonParams
@@ -11,6 +14,8 @@ import org.hxiao.der.util.SolrUtility
 
 class Wikipedia2SolrProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers {
   var server: EmbeddedSolrServer = _
+  var sc: SparkContext = _
+
   val solr_dir = getClass().getResource("solr").getPath()
   val solr_core_name = "test"
   val xml_path = getClass().getResource("output-head-100.xml").getPath()
@@ -20,7 +25,14 @@ class Wikipedia2SolrProcessorSpec extends FlatSpec with BeforeAndAfter with Matc
   
 
   before {
-    Wikipedia2SolrProcessor.run(solr_dir, solr_core_name, xml_path)
+    // spark context
+    val conf = new SparkConf()
+      .setMaster("local[2]")
+      .setAppName("Wikipedia2SolrProcessor")
+
+    sc = new SparkContext(conf)
+
+    Wikipedia2SolrProcessor.run(sc, solr_dir, solr_core_name, xml_path)
 
     server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
   }
@@ -60,6 +72,9 @@ class Wikipedia2SolrProcessorSpec extends FlatSpec with BeforeAndAfter with Matc
     if(server != null){
       server.deleteByQuery( "*:*" )
       server.shutdown()
+    }
+    if(sc != null){
+      sc.stop()
     }
   }
 }
