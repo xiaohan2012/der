@@ -53,3 +53,7 @@
 - [sequence test execution in SBT(create one spark context at a time)](http://stackoverflow.com/questions/15145987/how-to-run-specifications-sequentially)
 - [Solr, OverlappingFileLockException -> core not available](http://stackoverflow.com/questions/5898977/solr-overlappingfilelockexception-when-concurrent-commits)
 - [Solr Query Syntax](http://www.solrtutorial.com/solr-query-syntax.htm)
+- [Submit Spark application](https://spark.apache.org/docs/1.1.0/submitting-applications.html)
+- [SBT Assembly: create fat jar](https://github.com/sbt/sbt-assembly) and [Solution for scala 2.11](http://stackoverflow.com/questions/28459333/how-to-build-an-uber-jar-fat-jar-using-sbt-within-intellij-idea)
+- [classpath in sbt](http://stackoverflow.com/questions/21698205/how-to-display-classpath-used-for-run-task)
+- [Spark test in standalone cluster](http://eugenezhulenev.com/blog/2014/10/18/run-tests-in-standalone-spark-cluster/)

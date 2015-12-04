@@ -24,9 +24,9 @@ object Wikipedia2SolrProcessor {
   def main(args: Array[String]) = {
     val conf = new SparkConf().setAppName("Wikipedia2SolrProcessor")
     val sc = new SparkContext(conf)
-    val solr_dir = args(1)
-    val core_name = args(2)
-    val xml_path = args(3)
+    val solr_dir = args(0)
+    val core_name = args(1)
+    val xml_path = args(2)
     println(s"solr_dir: ${solr_dir}")
     println(s"core_name: ${core_name}")
     println(s"xml_path: ${xml_path}")

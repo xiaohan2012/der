@@ -23,3 +23,11 @@ libraryDependencies ++= Seq(
 
 // ensure only one spark context created at each time
 parallelExecution in Test := false
+
+META-INF discarding
+mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
+   {
+     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+     case x => MergeStrategy.first
+   }
+}
