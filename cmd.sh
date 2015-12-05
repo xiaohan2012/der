@@ -1,0 +1,1 @@
+~/spark-related/spark-1.5.2-bin-hadoop2.4/bin/spark-submit --class org.hxiao.der.Wikipedia2SolrProcessor --master local[2] target/scala-2.11/der_2.11-0.1.0.jar src/test/resources/solr/ test src/test/resources/output-head-100.xml
