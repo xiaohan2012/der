@@ -59,3 +59,4 @@
 - [Spark test in standalone cluster](http://eugenezhulenev.com/blog/2014/10/18/run-tests-in-standalone-spark-cluster/)
 - [Spark for Scala 2.11](http://spark.apache.org/docs/latest/building-spark.html#building-for-scala-211)
 - Suppress Solr update log: `log4j.logger.org.apache.solr.core=WARN` and `log4j.logger.org.apache.solr.update.processor=WARN` in `log4j.properties`
+- [kill -9](http://unix.stackexchange.com/questions/5642/what-if-kill-9-does-not-work)
