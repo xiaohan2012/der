@@ -57,3 +57,4 @@
 - [SBT Assembly: create fat jar](https://github.com/sbt/sbt-assembly) and [Solution for scala 2.11](http://stackoverflow.com/questions/28459333/how-to-build-an-uber-jar-fat-jar-using-sbt-within-intellij-idea)
 - [classpath in sbt](http://stackoverflow.com/questions/21698205/how-to-display-classpath-used-for-run-task)
 - [Spark test in standalone cluster](http://eugenezhulenev.com/blog/2014/10/18/run-tests-in-standalone-spark-cluster/)
+- [Spark for Scala 2.11](http://spark.apache.org/docs/latest/building-spark.html#building-for-scala-211)
