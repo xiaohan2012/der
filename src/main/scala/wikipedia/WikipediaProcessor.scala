@@ -90,5 +90,13 @@ object WikipediaProcessor {
 
     return (title2id, links, surface_names)
   }
+
+  def extractSurfaceNames(sc: SparkContext, xml_path: String): RDD[SurfaceName] = {
+    val pageInfo = collectPageInfo(sc, xml_path)
+    val raw_anchors = collectAnchors(pageInfo)
+    val title2id = collectTitle2Id(pageInfo).collectAsMap()
+    val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
+    WikipediaProcessor.collectSurfaceNames(anchors)
+  }
 }
 
