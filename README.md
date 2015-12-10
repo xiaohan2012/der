@@ -59,3 +59,5 @@
 - [Spark for Scala 2.11](http://spark.apache.org/docs/latest/building-spark.html#building-for-scala-211)
 - [Unmanaged JARs in sbt](http://www.scala-sbt.org/release/tutorial/Library-Dependencies.html)
 - ["Object is not a value" error](http://stackoverflow.com/questions/9079129/object-is-not-a-value-error-in-scala)
+- Suppress Solr update log: `log4j.logger.org.apache.solr.core=WARN` and `log4j.logger.org.apache.solr.update.processor=WARN` in `log4j.properties`
+- [kill -9](http://unix.stackexchange.com/questions/5642/what-if-kill-9-does-not-work)
