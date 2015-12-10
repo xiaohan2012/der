@@ -20,16 +20,19 @@ object SolrUtility {
 }
 
 class SolrUtility(server: EmbeddedSolrServer) {
+  def addSurfaceName(sf: SurfaceName) = {
+    val doc = new SolrInputDocument()
+    doc.addField("surface_name", sf.name)
+    doc.addField("occurrences", sf.occurrences)
+    doc.addField("log_occurrences", log10(sf.occurrences))
+    server.add(doc)
+  }
   def addSurfaceNamesFromRDD(surface_names: RDD[SurfaceName]) = {
-    surface_names.toLocalIterator.foreach {
-      sf => {
-        val doc = new SolrInputDocument()
-        doc.addField("surface_name", sf.name)
-        doc.addField("occurrences", sf.occurrences)
-        doc.addField("log_occurrences", log10(sf.occurrences))
-        server.add(doc)
-      }
-    }
+    surface_names.toLocalIterator.foreach(addSurfaceName)
+    server.commit
+  }
+  def addSurfaceNames(surface_names: Iterator[SurfaceName]) = {
+    surface_names.foreach(addSurfaceName)
     server.commit
   }
 }

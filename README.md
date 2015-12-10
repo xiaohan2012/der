@@ -8,7 +8,6 @@
 
 - [Good tutorial on Scala XML](https://bcomposes.wordpress.com/2012/05/04/basic-xml-processing-with-scala/): read, query, iterate, convert to/from object
 - [Get method names for Scala object](http://stackoverflow.com/questions/2886446/how-to-get-methods-list-in-scala)
-- [Scala regular expression]()
 - [Scala interpreter print longer traces](http://stackoverflow.com/questions/3767808/how-to-force-interpreter-show-complete-stack-trace/3769827#3769827)
 - [Regular expression with lazy matching and non-capturing group](http://stackoverflow.com/questions/8213837/optional-grouping-in-scala-regular-expressions), [regular expression web tool](http://regexr.com/2v8m4) and my work: [regexp on Wiki markup freelink](http://regexr.com/3c87k)
 - [Parse huge xml files](http://www.lucasallan.com/2014/12/23/parsing-huge-xml-files-in-scala.html)
@@ -33,7 +32,7 @@
 - [create a class meanwhile modifying its definition](http://stackoverflow.com/questions/3648870/scala-using-hashmap-with-a-default-value)
 - [spark groupBy](http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html#groupBy)
 - [mapValues and frequency calculation](http://stackoverflow.com/questions/12105130/generating-a-frequency-map-for-a-string-in-scala)
-- [NER using Solr](http://sujitpal.blogspot.fi/2013/07/dictionary-backed-named-entity.html)
+- [Chunker/NER using Solr](http://sujitpal.blogspot.fi/2013/07/dictionary-backed-named-entity.html)
 - Solr
   - [API: add document programically](https://wiki.apache.org/solr/Solrj)
   - [query syntax](https://wiki.apache.org/solr/CommonQueryParameters#fl)
@@ -58,3 +57,5 @@
 - [classpath in sbt](http://stackoverflow.com/questions/21698205/how-to-display-classpath-used-for-run-task)
 - [Spark test in standalone cluster](http://eugenezhulenev.com/blog/2014/10/18/run-tests-in-standalone-spark-cluster/)
 - [Spark for Scala 2.11](http://spark.apache.org/docs/latest/building-spark.html#building-for-scala-211)
+- [Unmanaged JARs in sbt](http://www.scala-sbt.org/release/tutorial/Library-Dependencies.html)
+- ["Object is not a value" error](http://stackoverflow.com/questions/9079129/object-is-not-a-value-error-in-scala)
