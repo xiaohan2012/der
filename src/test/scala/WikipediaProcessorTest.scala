@@ -68,8 +68,6 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       title2id.collectAsMap()
     }
 
-    // TODO:
-    // - redirect normalization
     val links = WikipediaProcessor.normalizeLinks(raw_links, title2id.collectAsMap())
     expected_links should equal {
       links.collect().sorted
@@ -84,7 +82,7 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       anchors.collect().sorted
     }
 
-    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
+    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable=false)
     
     expected_surface_names should equal {
       surface_names.collect.toList.sorted.map {
@@ -92,11 +90,19 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       }
     }
 
+    val surface_names_without_tables = WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable=true)
+    
+    expected_surface_names.map(s=> {new SurfaceName(s.name, null, s.occurrences)}) should equal {
+      surface_names_without_tables.collect.toList.sorted.map {
+        s => new SurfaceName(s.name, null, s.occurrences)
+      }
+    }
+
   }
 
   "WikipediaProcessor.apply(faked test set)" should "return: title2id, links, surface2entity frequency as expected" in {
     val xml_path = getClass().getResource("1234-example.xml").getPath()
-    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
+    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path, ignoreTable=false)
     expected_title2id should equal {
       title2id
     }

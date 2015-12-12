@@ -74,7 +74,7 @@ object WikipediaProcessor {
   def normalizeAnchors(raw_anchors: RDD[RawAnchor], title2id: Broadcast[Map[String, Int]]): RDD[Anchor] = 
     normalizeAnchors(raw_anchors, title2id.value)
   
-  def collectSurfaceNames(anchors: RDD[Anchor]): RDD[SurfaceName] = {
+  def collectSurfaceNames(anchors: RDD[Anchor], ignoreTable: Boolean = true): RDD[SurfaceName] = {
     anchors.map(
       a => (a.surface, a.id)
     ).aggregateByKey(
@@ -88,8 +88,12 @@ object WikipediaProcessor {
         }
       }
     ).map {
-      case (surface, tbl) =>
-        new SurfaceName(surface, tbl.toSeq)
+      case (surface, tbl) => {
+        if(ignoreTable)
+          new SurfaceName(surface, null, tbl.values.sum)
+        else
+          new SurfaceName(surface, tbl.toSeq)
+      }
     }
   }
 
@@ -97,7 +101,7 @@ object WikipediaProcessor {
   // 1. title2id mapping
   // 2. links
   // 3. surface2entity frequency
-  def apply(sc: SparkContext, xml_path: String): (Map[String, Int], RDD[Link], RDD[SurfaceName]) = {
+  def apply(sc: SparkContext, xml_path: String, ignoreTable: Boolean=false): (Map[String, Int], RDD[Link], RDD[SurfaceName]) = {
     val pageInfo = collectPageInfo(sc, xml_path, sc.defaultMinPartitions)
     val raw_links = collectLinks(pageInfo)
     val raw_anchors = collectAnchors(pageInfo)
@@ -111,18 +115,18 @@ object WikipediaProcessor {
 
     val links = normalizeLinks(raw_links, title2id)
     val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
-    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
+    val surface_names = WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable)
 
     return (title2id.value, links, surface_names)
   }
 
-  def extractSurfaceNames(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[SurfaceName] = {
+  def extractSurfaceNames(sc: SparkContext, xml_path: String, min_partitions: Int, ignoreTable: Boolean=false): RDD[SurfaceName] = {
     val pageInfo = collectPageInfo(sc, xml_path, min_partitions)
     val raw_anchors = collectAnchors(pageInfo)
     val title2id = collectTitle2Id(pageInfo).collectAsMap()
     val title2id_broadcast = sc.broadcast(title2id)
     val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id_broadcast)
-    WikipediaProcessor.collectSurfaceNames(anchors)
+    WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable=ignoreTable)
   }
 }
 

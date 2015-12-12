@@ -13,7 +13,7 @@ object Wikipedia2SolrProcessor {
     // solr server
     val server = SolrUtility.createEmbeddedSolrServer(solr_dir, core_name)
 
-    val surface_names = WikipediaProcessor.extractSurfaceNames(sc, xml_path, min_partitions)
+    val surface_names = WikipediaProcessor.extractSurfaceNames(sc, xml_path, min_partitions, ignoreTable=true)
 
     val solr_util = new SolrUtility(server)
     solr_util.addSurfaceNamesFromRDD(surface_names)
