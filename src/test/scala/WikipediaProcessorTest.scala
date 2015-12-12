@@ -41,7 +41,7 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
   "A list of methods of WikipediaProcessor" should "return: - a list of links between articles - surface to entity frequency - entity to id mapping" in {
     val xml_path = getClass().getResource("1234-example.xml").getPath()
 
-    val pageInfo = WikipediaProcessor.collectPageInfo(sc, xml_path)
+    val pageInfo = WikipediaProcessor.collectPageInfo(sc, xml_path, sc.defaultMinPartitions)
 
     3 should equal {
       pageInfo.collect().length

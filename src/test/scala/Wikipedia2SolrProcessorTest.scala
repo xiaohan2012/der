@@ -32,7 +32,7 @@ class Wikipedia2SolrProcessorSpec extends FlatSpec with BeforeAndAfter with Matc
 
     sc = new SparkContext(conf)
 
-    Wikipedia2SolrProcessor.run(sc, solr_dir, solr_core_name, xml_path)
+    Wikipedia2SolrProcessor.run(sc, solr_dir, solr_core_name, xml_path, sc.defaultMinPartitions)
 
     server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
   }

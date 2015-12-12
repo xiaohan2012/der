@@ -4,6 +4,7 @@ import scala.xml.XML
 import org.apache.spark
 import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkContext
+import org.apache.spark.broadcast.Broadcast
 // import org.apache.spark.sql.SQLContext
 
 import scala.collection.Map
@@ -26,8 +27,8 @@ import org.hxiao.der.wikipedia.classes._
 object WikipediaProcessor {
   val NON_EXIST_ENTITY_ID = -1
 
-  def collectPageInfo(sc: SparkContext, xml_path: String): RDD[RawPageInfo] = {
-    sc.textFile(xml_path).map {
+  def collectPageInfo(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[RawPageInfo] = {
+    sc.textFile(xml_path, min_partitions).map {
       XML.loadString(_)
     }.filter {
       page => (page  \ "redirect").length == 0  // not a redirect page
@@ -59,6 +60,9 @@ object WikipediaProcessor {
     }
   }
 
+  def normalizeLinks(raw_links: RDD[RawLink], title2id: Broadcast[Map[String, Int]]): RDD[Link] = 
+    normalizeLinks(raw_links, title2id.value)
+
   def normalizeAnchors(raw_anchors: RDD[RawAnchor], title2id: Map[String, Int]): RDD[Anchor] = {
     raw_anchors.map {
       a => Anchor(
@@ -67,9 +71,10 @@ object WikipediaProcessor {
       )
     }
   }
+  def normalizeAnchors(raw_anchors: RDD[RawAnchor], title2id: Broadcast[Map[String, Int]]): RDD[Anchor] = 
+    normalizeAnchors(raw_anchors, title2id.value)
   
   def collectSurfaceNames(anchors: RDD[Anchor]): RDD[SurfaceName] = {
-    
     anchors.map(
       a => (a.surface, a.id)
     ).aggregateByKey(
@@ -93,27 +98,30 @@ object WikipediaProcessor {
   // 2. links
   // 3. surface2entity frequency
   def apply(sc: SparkContext, xml_path: String): (Map[String, Int], RDD[Link], RDD[SurfaceName]) = {
-    val pageInfo = collectPageInfo(sc, xml_path)
+    val pageInfo = collectPageInfo(sc, xml_path, sc.defaultMinPartitions)
     val raw_links = collectLinks(pageInfo)
     val raw_anchors = collectAnchors(pageInfo)
-    val title2id = collectTitle2Id(pageInfo).collectAsMap()
+    val title2id = sc.broadcast(collectTitle2Id(pageInfo).collectAsMap())
 
     // is title2id computed twice?
-    // maybe title2id should be cached using `persist()` or `broadcast()`?
+    // maybe title2id should be cached using `persist()`
+    // `persist` only works for RDD
+    // maybe `broadcast()`?
     // http://spark.apache.org/docs/latest/programming-guide.html#basics
 
     val links = normalizeLinks(raw_links, title2id)
     val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
     val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
 
-    return (title2id, links, surface_names)
+    return (title2id.value, links, surface_names)
   }
 
-  def extractSurfaceNames(sc: SparkContext, xml_path: String): RDD[SurfaceName] = {
-    val pageInfo = collectPageInfo(sc, xml_path)
+  def extractSurfaceNames(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[SurfaceName] = {
+    val pageInfo = collectPageInfo(sc, xml_path, min_partitions)
     val raw_anchors = collectAnchors(pageInfo)
     val title2id = collectTitle2Id(pageInfo).collectAsMap()
-    val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
+    val title2id_broadcast = sc.broadcast(title2id)
+    val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id_broadcast)
     WikipediaProcessor.collectSurfaceNames(anchors)
   }
 }
