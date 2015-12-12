@@ -3,6 +3,10 @@
 - [Wikipedia dump link](https://dumps.wikimedia.org/enwiki/20151102/enwiki-20151102-pages-articles-multistream.xml.bz2)
 
 
+# Popular
+
+- [API: Spark 1.5.2 for Scala](http://spark.apache.org/docs/latest/api/scala/index.html)
+- [ByKey* functions in Spark](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.rdd.PairRDDFunctions)
 
 # Learning resources
 
@@ -46,7 +50,6 @@
 - [Core definition(new) in Solr](https://cwiki.apache.org/confluence/display/solr/Defining+core.properties)
 - [Solr schema data types](https://cwiki.apache.org/confluence/display/solr/Field+Types+Included+with+Solr)
 - [ScalaTest almost equal](http://stackoverflow.com/questions/29938653/scalatest-check-for-almost-equal-for-floats-and-objects-containing-floats/29940436#29940436)
-- [API: Spark 1.5.2 for Scala](http://spark.apache.org/docs/latest/api/scala/index.html)
 - [Spark partition opeation(quite a lot)](https://spark.apache.org/docs/1.0.0/api/java/org/apache/spark/rdd/RDD.html)
 - [RDD.toLocalIterator](https://spark.apache.org/docs/1.0.0/api/java/org/apache/spark/rdd/RDD.html#toLocalIterator%28%29)
 - [sequence test execution in SBT(create one spark context at a time)](http://stackoverflow.com/questions/15145987/how-to-run-specifications-sequentially)
@@ -61,3 +64,4 @@
 - ["Object is not a value" error](http://stackoverflow.com/questions/9079129/object-is-not-a-value-error-in-scala)
 - Suppress Solr update log: `log4j.logger.org.apache.solr.core=WARN` and `log4j.logger.org.apache.solr.update.processor=WARN` in `log4j.properties`
 - [kill -9](http://unix.stackexchange.com/questions/5642/what-if-kill-9-does-not-work)
+- [Column based storage](https://en.wikipedia.org/wiki/Column-oriented_DBMS) and [Parquet](https://parquet.apache.org/)

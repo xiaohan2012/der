@@ -31,8 +31,7 @@ package object classes {
       this(n, ec,
         ec.map(_._2).sum
       )
-    }
-    
+    }    
     def compare(that: SurfaceName) = this.name compare that.name
 
   }

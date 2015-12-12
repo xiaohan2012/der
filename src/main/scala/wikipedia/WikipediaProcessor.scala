@@ -8,6 +8,7 @@ import org.apache.spark.SparkContext
 
 import scala.collection.Map
 import scala.collection.immutable.HashMap
+import scala.collection.mutable.{HashMap => MHashMap}
 
 
 import org.hxiao.der.wikipedia.classes._
@@ -66,12 +67,24 @@ object WikipediaProcessor {
       )
     }
   }
-
+  
   def collectSurfaceNames(anchors: RDD[Anchor]): RDD[SurfaceName] = {
-    anchors.groupBy {
-      anchor => anchor.surface
-    }.map {
-      case (s, as) => new SurfaceName(s, as.groupBy(a => a.id).mapValues(_.size).toSeq)
+    
+    anchors.map(
+      a => (a.surface, a.id)
+    ).aggregateByKey(
+      MHashMap[EntityID, Int]()
+    )((table, id) => {
+      table.put(id, table.getOrElse(id, 0) + 1)
+      table
+      },
+      (t1, t2) => {
+        t1 ++ t2.map { case(k, v) => (k, v + t1.getOrElse(k, 0))
+        }
+      }
+    ).map {
+      case (surface, tbl) =>
+        new SurfaceName(surface, tbl.toSeq)
     }
   }
 
@@ -84,6 +97,11 @@ object WikipediaProcessor {
     val raw_links = collectLinks(pageInfo)
     val raw_anchors = collectAnchors(pageInfo)
     val title2id = collectTitle2Id(pageInfo).collectAsMap()
+
+    // is title2id computed twice?
+    // maybe title2id should be cached using `persist()` or `broadcast()`?
+    // http://spark.apache.org/docs/latest/programming-guide.html#basics
+
     val links = normalizeLinks(raw_links, title2id)
     val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id)
     val surface_names = WikipediaProcessor.collectSurfaceNames(anchors)
