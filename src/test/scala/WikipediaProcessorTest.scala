@@ -92,10 +92,16 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
 
     val surface_names_without_tables = WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable=true)
     
-    expected_surface_names.map(s=> {new SurfaceName(s.name, null, s.occurrences)}) should equal {
+    val expected_surface_names_without_tables = expected_surface_names.map(s=> {new SurfaceName(s.name, null, s.occurrences)}).sorted
+    expected_surface_names_without_tables should equal {
       surface_names_without_tables.collect.toList.sorted.map {
         s => new SurfaceName(s.name, null, s.occurrences)
       }
+    }
+
+    val surface_names_with_only_count = WikipediaProcessor.collectSurfaceCount(anchors)
+    expected_surface_names_without_tables should equal {
+      surface_names_with_only_count.collect.toList.sorted
     }
 
   }

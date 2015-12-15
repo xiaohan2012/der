@@ -97,6 +97,15 @@ object WikipediaProcessor {
     }
   }
 
+  def collectSurfaceCount(anchors: RDD[Anchor]): RDD[SurfaceName] = {
+    anchors.map(
+      a => (a.surface, 1)
+    ).reduceByKey {
+      case (acc, i) => acc + i
+    }.map {
+      case (surface, count) => new SurfaceName(surface, null, count)
+    }
+  }
   // return:
   // 1. title2id mapping
   // 2. links
@@ -120,13 +129,22 @@ object WikipediaProcessor {
     return (title2id.value, links, surface_names)
   }
 
-  def extractSurfaceNames(sc: SparkContext, xml_path: String, min_partitions: Int, ignoreTable: Boolean=false): RDD[SurfaceName] = {
+  def extractNormalizedAnchors(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[Anchor] = {
     val pageInfo = collectPageInfo(sc, xml_path, min_partitions)
     val raw_anchors = collectAnchors(pageInfo)
     val title2id = collectTitle2Id(pageInfo).collectAsMap()
     val title2id_broadcast = sc.broadcast(title2id)
-    val anchors = WikipediaProcessor.normalizeAnchors(raw_anchors, title2id_broadcast)
+    WikipediaProcessor.normalizeAnchors(raw_anchors, title2id_broadcast)
+  }
+
+  def extractSurfaceNames(sc: SparkContext, xml_path: String, min_partitions: Int, ignoreTable: Boolean=false): RDD[SurfaceName] = {
+    val anchors = extractNormalizedAnchors(sc, xml_path, min_partitions)
     WikipediaProcessor.collectSurfaceNames(anchors, ignoreTable=ignoreTable)
+  }
+
+  def extractSurfaceCount(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[SurfaceName] = {
+    val anchors = extractNormalizedAnchors(sc, xml_path, min_partitions)
+    WikipediaProcessor.collectSurfaceCount(anchors)
   }
 }
 
