@@ -11,6 +11,7 @@ import scala.collection.Map
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.{HashMap => MHashMap}
 
+import java.lang.instrument.Instrumentation
 
 import org.hxiao.der.wikipedia.classes._
 
@@ -71,6 +72,7 @@ object WikipediaProcessor {
       )
     }
   }
+
   def normalizeAnchors(raw_anchors: RDD[RawAnchor], title2id: Broadcast[Map[String, Int]]): RDD[Anchor] = 
     normalizeAnchors(raw_anchors, title2id.value)
   
@@ -104,6 +106,14 @@ object WikipediaProcessor {
       case (acc, i) => acc + i
     }.map {
       case (surface, count) => new SurfaceName(surface, null, count)
+    }
+  }
+
+  def collectSurfaceCountTuples(anchors: RDD[Anchor]): RDD[(String, Int)] = {
+    anchors.map(
+      a => (a.surface, 1)
+    ).reduceByKey {
+      case (acc, i) => acc + i
     }
   }
   // return:
@@ -148,5 +158,10 @@ object WikipediaProcessor {
     val anchors = extractNormalizedAnchors(sc, xml_path, min_partitions)
     WikipediaProcessor.collectSurfaceCount(anchors)
   }
+  def extractSurfaceCountTuples(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[(String, Int)] = {
+    val anchors = extractNormalizedAnchors(sc, xml_path, min_partitions)
+    WikipediaProcessor.collectSurfaceCountTuples(anchors)
+  }
+  
 }
 
