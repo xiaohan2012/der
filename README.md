@@ -65,9 +65,12 @@
 - Suppress Solr update log: `log4j.logger.org.apache.solr.core=WARN` and `log4j.logger.org.apache.solr.update.processor=WARN` in `log4j.properties`
 - [kill -9](http://unix.stackexchange.com/questions/5642/what-if-kill-9-does-not-work)
 - [Column based storage](https://en.wikipedia.org/wiki/Column-oriented_DBMS) and [Parquet](https://parquet.apache.org/)
+- [double definition after compiler type eraser](http://stackoverflow.com/questions/3307427/scala-double-definition-2-methods-have-the-same-type-erasure)
 
 
 # Errors
 
 - Error writing stream to file `stderr`, stream closed
 - [Actor not found](http://apache-spark-user-list.1001560.n3.nabble.com/Actor-not-found-td22265.html)
+
+
