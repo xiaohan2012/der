@@ -9,6 +9,8 @@ import com.aliasi.chunk.{Chunk, Chunker}
 import com.aliasi.dict.{DictionaryEntry, MapDictionary, ExactDictionaryChunker}
 import com.aliasi.tokenizer.IndoEuropeanTokenizerFactory
 
+import org.hxiao.der.util.SolrUtility
+
 
 class SolrMapDictionary(
   val solr: EmbeddedSolrServer, val nrows: Int)
@@ -50,4 +52,20 @@ class DictionaryMentionDetector(dict: MapDictionary[String]){
   def mkString(text: String, chunks: List[Chunk]): List[String] = 
     chunks.map {chunk => text.substring(chunk.start(), chunk.end())}
 
+}
+
+object DictionaryMentionDetector{
+  def main(args: Array[String]) = {
+    val text = args(0)
+
+    val solr_dir = "/cs/home/hxiao/solr"
+    val solr_core_name = "surface_names"
+    val solr_server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
+    val dict = new SolrMapDictionary(solr_server, 100)
+    val detector = new DictionaryMentionDetector(dict)
+    val chunks = detector.detect(text)
+
+    println(detector.mkString(text, chunks).sorted)
+	
+  }
 }
