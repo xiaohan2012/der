@@ -69,3 +69,6 @@
 - [Talk: Dictionary Based Annotation at Scale with Spark SolrTextTagger and OpenNLP](https://www.youtube.com/watch?v=gOe0aYAS8Do): more on optimization
 - [ClassCastException](http://stackoverflow.com/questions/3511169/java-lang-classcastexception) and check the software dependency version
 - [Solr add classpath](https://cwiki.apache.org/confluence/display/solr/Lib+Directives+in+SolrConfig)
+- [Adding Play Json to sbt](http://stackoverflow.com/questions/19436069/adding-play-json-library-to-sbt)
+- [Play Json example](https://www.playframework.com/documentation/2.1.1/ScalaJson)
+- [Five ways to create Scala List](http://alvinalexander.com/scala/how-create-scala-list-range-fill-tabulate-constructors)

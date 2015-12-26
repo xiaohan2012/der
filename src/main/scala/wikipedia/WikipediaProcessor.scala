@@ -1,5 +1,6 @@
 package org.hxiao.der.wikipedia
 
+import play.api.libs.json._
 import scala.xml.XML
 import org.apache.spark
 import org.apache.spark.rdd.RDD
@@ -163,5 +164,29 @@ object WikipediaProcessor {
     WikipediaProcessor.collectSurfaceCountTuples(anchors)
   }
   
+
+  def extractOutLinks(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[(Int, Set[Int])] = {
+    val pageInfo = collectPageInfo(sc, xml_path, min_partitions)
+    val title2id = collectTitle2Id(pageInfo).collectAsMap()
+
+    pageInfo.map{
+      p => {
+        val to_entities = p.links.map {
+          l => title2id.getOrElse(l.target_title, NON_EXIST_ENTITY_ID)
+        }
+        (p.entity.id, to_entities.toSet)
+      }
+    }
+  }
+
+  def extractOutLinks(sc: SparkContext, xml_path: String): RDD[(Int, Set[Int])] =
+    extractOutLinks(sc, xml_path, sc.defaultMinPartitions)
+
+  def jsonizeOutLinks(links: RDD[(Int, Set[Int])]): RDD[String] = {
+    links.map { 
+      l => Json.stringify(Json.arr(l._1, l._2))
+    }
+  }
+
 }
 
