@@ -14,10 +14,10 @@ resolvers += "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/mave
 
 libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.10" % "2.2.4" % "test",
-  // "org.scala-lang.modules" %% "scala-xml" % "1.0.2",
   "org.apache.spark" %% "spark-core" % "1.5.2",
-  "org.apache.solr" % "solr-solrj" % "5.3.1",
-  "org.apache.solr" % "solr-core" % "5.3.1"
+  "org.apache.solr" % "solr-solrj" % "5.2.0",
+  "org.apache.solr" % "solr-core" % "5.2.0",
+  "org.opensextant" % "solr-text-tagger" % "2.2"
 )
 
 
@@ -41,3 +41,5 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>  {
   case x => MergeStrategy.first
 }
 }
+
+

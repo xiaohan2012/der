@@ -29,7 +29,7 @@
  http://wiki.apache.org/solr/SchemaXml
 -->
 
-<schema name="test" version="1.5">
+<schema name="test" version="1.4">
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
     <!-- boolean type: "true" or "false" -->
@@ -61,8 +61,26 @@
     <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
     <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
 	
+	<fieldType name="tag" class="solr.TextField" positionIncrementGap="100" postingsFormat="Memory"
+			   omitTermFreqAndPositions="true" omitNorms="true">
+	  <analyzer type="index">
+		<tokenizer class="solr.StandardTokenizerFactory"/>
+		<filter class="solr.EnglishPossessiveFilterFactory" />
+		<filter class="solr.ASCIIFoldingFilterFactory"/>
+		<filter class="solr.LowerCaseFilterFactory" />
+
+		<filter class="org.opensextant.solrtexttagger.ConcatenateFilterFactory" />
+	  </analyzer>
+	  <analyzer type="query">
+		<tokenizer class="solr.StandardTokenizerFactory"/>
+		<filter class="solr.EnglishPossessiveFilterFactory" />
+		<filter class="solr.ASCIIFoldingFilterFactory"/>
+		<filter class="solr.LowerCaseFilterFactory" />
+	  </analyzer>
+	</fieldType>
+
 	<field name="_version_" type="long" indexed="true" stored="true"/>
-	<field name="surface_name" type="string" indexed="true" stored="true"/>
+	<field name="surface_name" type="tag" indexed="true" stored="true"/>
 	<field name="occurrences" type="int" indexed="false" stored="true"/>
 	<field name="log_occurrences" type="double" indexed="false" stored="true"/>
 </schema>

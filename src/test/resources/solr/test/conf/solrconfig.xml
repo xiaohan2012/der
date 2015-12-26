@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>5.3.1</luceneMatchVersion>
+  <luceneMatchVersion>5.2.0</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -575,6 +575,13 @@
     </arr>
   </requestHandler>
 
+  <requestHandler name="/tag" class="org.opensextant.solrtexttagger.TaggerRequestHandler">
+	<lst name="defaults">
+      <str name="field">name_tag</str>
+      <str name="fq">PUT SOME SOLR QUERY HERE; OPTIONAL</str><!-- filter out -->
+	</lst>
+  </requestHandler>
+  
   <!-- Legacy config for the admin interface -->
   <admin>
     <defaultQuery>*:*</defaultQuery>
