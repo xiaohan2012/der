@@ -184,10 +184,8 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     }
   }
 
-  "WkikipediaProcessor.jsonizeOutLinks" should "return RDD[String] json format" in {
-    val output = WikipediaProcessor.jsonizeOutLinks(sc.parallelize(expected_out_links)).collect.toList
-    // println(output)
-    // println(expected_out_links)
+  "WkikipediaProcessor.jsonizeLinks" should "return RDD[String] json format" in {
+    val output = WikipediaProcessor.jsonizeLinks(sc.parallelize(expected_out_links)).collect.toList
     output.zip(expected_out_links) foreach {
       case (string, link) => {
         val actual = Json.parse(string)

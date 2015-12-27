@@ -204,7 +204,7 @@ object WikipediaProcessor {
   def extractInLinks(sc: SparkContext, out_links: RDD[(Int, Set[Int])]): RDD[(Int, Set[Int])] =
     extractInLinks(sc, out_links, sc.defaultMinPartitions)
 
-  def jsonizeOutLinks(links: RDD[(Int, Set[Int])]): RDD[String] = {
+  def jsonizeLinks(links: RDD[(Int, Set[Int])]): RDD[String] = {
     links.map { 
       l => Json.stringify(Json.arr(l._1, l._2))
     }

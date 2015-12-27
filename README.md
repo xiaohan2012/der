@@ -73,3 +73,4 @@
 - [Play Json example](https://www.playframework.com/documentation/2.1.1/ScalaJson)
 - [Five ways to create Scala List](http://alvinalexander.com/scala/how-create-scala-list-range-fill-tabulate-constructors)
 - [Scala Set](http://www.scala-lang.org/docu/files/collections-api/collections_7.html)
+- [FileUtils](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FileUtils.html)
