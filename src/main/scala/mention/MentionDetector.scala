@@ -57,15 +57,23 @@ class DictionaryMentionDetector(dict: MapDictionary[String]){
 object DictionaryMentionDetector{
   def main(args: Array[String]) = {
     val text = args(0)
+    val nrows = args(1)
 
     val solr_dir = "/cs/home/hxiao/solr"
     val solr_core_name = "surface_names"
     val solr_server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
-    val dict = new SolrMapDictionary(solr_server, 100)
+    val dict = new SolrMapDictionary(solr_server, nrows.toInt)
+
+    println("dict:", dict)
+
     val detector = new DictionaryMentionDetector(dict)
     val chunks = detector.detect(text)
+    
+    println("text:", text)
+    println("chunks:", chunks)
+    println("result:", detector.mkString(text, chunks).sorted)
 
-    println(detector.mkString(text, chunks).sorted)
-	
+    solr_server.shutdown()
+
   }
 }

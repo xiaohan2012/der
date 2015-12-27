@@ -66,7 +66,12 @@
 - [kill -9](http://unix.stackexchange.com/questions/5642/what-if-kill-9-does-not-work)
 - [Column based storage](https://en.wikipedia.org/wiki/Column-oriented_DBMS) and [Parquet](https://parquet.apache.org/)
 - [double definition after compiler type eraser](http://stackoverflow.com/questions/3307427/scala-double-definition-2-methods-have-the-same-type-erasure)
-
+- [object memory measurement](https://github.com/jbellis/jamm/)
+- [Spark architecture: workers, master](http://0x0fff.com/spark-architecture/): concepts covered:
+  - JVM heap memory allocation(storage, unroll, shuffle, etc)
+  - worker, executor, task(number of parallelism = core-per-executor x \#executor x \#worker)
+- [Run main in jar](http://stackoverflow.com/questions/8064699/export-scala-application-to-runnable-jar)
+- [Solr: index locked for write for core](http://stackoverflow.com/questions/17444493/caused-by-org-apache-solr-common-solrexception-index-locked-for-write-for-core)
 
 # Errors
 
@@ -74,3 +79,7 @@
 - [Actor not found](http://apache-spark-user-list.1001560.n3.nabble.com/Actor-not-found-td22265.html)
 
 
+
+# TODO
+
+- should surface names be lowercased?
