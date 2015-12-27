@@ -1,5 +1,6 @@
 package org.hxiao.der.wikipedia
 
+import play.api.libs.json._
 import scala.xml.XML
 import org.apache.spark
 import org.apache.spark.rdd.RDD
@@ -9,7 +10,7 @@ import org.apache.spark.broadcast.Broadcast
 
 import scala.collection.Map
 import scala.collection.immutable.HashMap
-import scala.collection.mutable.{HashMap => MHashMap}
+import scala.collection.mutable.{HashMap => MHashMap, Set => MSet}
 
 import java.lang.instrument.Instrumentation
 
@@ -163,5 +164,51 @@ object WikipediaProcessor {
     WikipediaProcessor.collectSurfaceCountTuples(anchors)
   }
   
+
+  def extractOutLinks(sc: SparkContext, xml_path: String, min_partitions: Int): RDD[(Int, Set[Int])] = {
+    val pageInfo = collectPageInfo(sc, xml_path, min_partitions)
+    val title2id = collectTitle2Id(pageInfo).collectAsMap()
+
+    pageInfo.map{
+      p => {
+        val to_entities = p.links.map {
+          l => title2id.getOrElse(l.target_title, NON_EXIST_ENTITY_ID)
+        }
+        (p.entity.id, to_entities.toSet)
+      }
+    }
+  }
+
+  def extractOutLinks(sc: SparkContext, xml_path: String): RDD[(Int, Set[Int])] =
+    extractOutLinks(sc, xml_path, sc.defaultMinPartitions)
+
+  def extractInLinks(sc: SparkContext, out_links: RDD[(Int, Set[Int])], min_partitions: Int): RDD[(Int, Set[Int])] = {
+    out_links.map {
+      case (source, targets) => {
+        targets map { t => (t, source)}
+      }
+    }
+      .flatMap(identity)
+      .aggregateByKey(
+      MSet[Int]()
+    )((set, source) => {set += source}, // seqOp
+      (s1, s2) => {s1 | s2} // combOp
+    )
+      .map { // to immutable
+      case (target, sources) => {
+        (target, sources.toSet)
+      }
+    }
+  }
+
+  def extractInLinks(sc: SparkContext, out_links: RDD[(Int, Set[Int])]): RDD[(Int, Set[Int])] =
+    extractInLinks(sc, out_links, sc.defaultMinPartitions)
+
+  def jsonizeLinks(links: RDD[(Int, Set[Int])]): RDD[String] = {
+    links.map { 
+      l => Json.stringify(Json.arr(l._1, l._2))
+    }
+  }
+
 }
 

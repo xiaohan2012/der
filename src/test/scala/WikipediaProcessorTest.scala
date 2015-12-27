@@ -1,6 +1,9 @@
+
 import org.apache.spark._
 import org.scalatest._
 import org.scalatest.Assertions._
+import play.api.libs.json._
+
 import scala.collection.immutable.HashMap
 
 import org.hxiao.der.wikipedia.WikipediaProcessor
@@ -12,7 +15,10 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
   private val appName = "WikipediaProcessorSpec"
 
   private var sc: SparkContext = _
-  
+
+  private val xml_path_fake = getClass().getResource("1234-example.xml").getPath()
+  private val xml_path_real = getClass().getResource("output-head-100.xml").getPath()
+
   // some expected values
   val expected_title2id = HashMap("One" -> 1, "Two" -> 2, "Three" -> 3)
 
@@ -30,6 +36,11 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     s => new SurfaceName(s.name, s.entity_count.sorted, s.occurrences)
   )
 
+  val expected_out_links = List(
+      (1, Set(WikipediaProcessor.NON_EXIST_ENTITY_ID, 2)),
+      (2, Set(3)),
+      (3, Set(1, 2))
+    )
   before {
     val conf = new SparkConf()
       .setMaster(master)
@@ -39,9 +50,8 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
   }
 
   "A list of methods of WikipediaProcessor" should "return: - a list of links between articles - surface to entity frequency - entity to id mapping" in {
-    val xml_path = getClass().getResource("1234-example.xml").getPath()
 
-    val pageInfo = WikipediaProcessor.collectPageInfo(sc, xml_path, sc.defaultMinPartitions)
+    val pageInfo = WikipediaProcessor.collectPageInfo(sc, xml_path_fake, sc.defaultMinPartitions)
 
     3 should equal {
       pageInfo.collect().length
@@ -106,9 +116,8 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
 
   }
 
-  "WikipediaProcessor.apply(faked test set)" should "return: title2id, links, surface2entity frequency as expected" in {
-    val xml_path = getClass().getResource("1234-example.xml").getPath()
-    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path, ignoreTable=false)
+  "WikipediaProcessor.apply(faked set)" should "return: title2id, links, surface2entity frequency as expected" in {
+    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path_fake, ignoreTable=false)
     expected_title2id should equal {
       title2id
     }
@@ -124,9 +133,8 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
     }
   }
 
-  "WikipediaProcessor.apply(real test set)" should "return: title2id, links, surface2entity frequency" in {
-    val xml_path = getClass().getResource("output-head-100.xml").getPath()
-    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path)
+  "WikipediaProcessor.apply(real set)" should "return: title2id, links, surface2entity frequency" in {
+    val (title2id, links, surface_names) = WikipediaProcessor.apply(sc, xml_path_real)
     12 should equal {
       title2id.getOrElse("Anarchism", -1)
     }
@@ -136,6 +144,58 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
 
     8041 should equal {
       links.collect.length
+    }
+  }
+
+  "WkikipediaProcessor.extractOutLinks(fake set)" should "return Seq[(Int, Seq[Int])]" in {
+    val links = WikipediaProcessor.extractOutLinks(sc, xml_path_fake).collect
+    3 should equal {
+      links.length
+    }
+
+    expected_out_links should equal {
+      links.toList
+    }
+  }
+  "WkikipediaProcessor.extractInLinks(fake set)" should "return Seq[(Int, Seq[Int])]" in {
+    val expected_in_links = Set(
+      (WikipediaProcessor.NON_EXIST_ENTITY_ID, Set(1)),
+      (1, Set(3)),
+      (2, Set(1, 3)),
+      (3, Set(2))
+    )
+    expected_in_links should equal {
+      WikipediaProcessor.extractInLinks(sc,
+        sc.parallelize(expected_out_links)
+      ).collect.toSet
+    }
+  }
+
+  "WkikipediaProcessor.extractOutLinks(real set)" should "return Seq[(Int, Seq[Int])]" in {
+    val links = WikipediaProcessor.extractOutLinks(sc, xml_path_real).collect
+    (100 - 72) should equal {
+      links.length
+    }
+    12 should equal {
+      links(0)._1
+    }
+    1 should equal {
+      links(0)._2.size
+    }
+  }
+
+  "WkikipediaProcessor.jsonizeLinks" should "return RDD[String] json format" in {
+    val output = WikipediaProcessor.jsonizeLinks(sc.parallelize(expected_out_links)).collect.toList
+    output.zip(expected_out_links) foreach {
+      case (string, link) => {
+        val actual = Json.parse(string)
+        link._1 should equal {
+           actual(0).as[Int]
+        }
+        link._2 should equal {
+          actual(1).as[Set[Int]]
+        }
+      }
     }
   }
 

@@ -54,7 +54,7 @@
 - [RDD.toLocalIterator](https://spark.apache.org/docs/1.0.0/api/java/org/apache/spark/rdd/RDD.html#toLocalIterator%28%29)
 - [sequence test execution in SBT(create one spark context at a time)](http://stackoverflow.com/questions/15145987/how-to-run-specifications-sequentially)
 - [Solr, OverlappingFileLockException -> core not available](http://stackoverflow.com/questions/5898977/solr-overlappingfilelockexception-when-concurrent-commits)
-- [Solr Query Syntax](http://www.solrtutorial.com/solr-query-syntax.htm)
+- [Solr Query Syntax](http://www.solrtutorial.com/solr-query-syntax.html)
 - [Submit Spark application](https://spark.apache.org/docs/1.1.0/submitting-applications.html)
 - [SBT Assembly: create fat jar](https://github.com/sbt/sbt-assembly) and [Solution for scala 2.11](http://stackoverflow.com/questions/28459333/how-to-build-an-uber-jar-fat-jar-using-sbt-within-intellij-idea)
 - [classpath in sbt](http://stackoverflow.com/questions/21698205/how-to-display-classpath-used-for-run-task)
@@ -72,6 +72,16 @@
   - worker, executor, task(number of parallelism = core-per-executor x \#executor x \#worker)
 - [Run main in jar](http://stackoverflow.com/questions/8064699/export-scala-application-to-runnable-jar)
 - [Solr: index locked for write for core](http://stackoverflow.com/questions/17444493/caused-by-org-apache-solr-common-solrexception-index-locked-for-write-for-core)
+- [Talk: Dictionary Based Annotation at Scale with Spark SolrTextTagger and OpenNLP](https://www.youtube.com/watch?v=gOe0aYAS8Do): more on optimization
+- [ClassCastException](http://stackoverflow.com/questions/3511169/java-lang-classcastexception) and check the software dependency version
+- [Solr add classpath](https://cwiki.apache.org/confluence/display/solr/Lib+Directives+in+SolrConfig)
+- [Adding Play Json to sbt](http://stackoverflow.com/questions/19436069/adding-play-json-library-to-sbt)
+- [Play Json example](https://www.playframework.com/documentation/2.1.1/ScalaJson)
+- [Five ways to create Scala List](http://alvinalexander.com/scala/how-create-scala-list-range-fill-tabulate-constructors)
+- [Scala Set](http://www.scala-lang.org/docu/files/collections-api/collections_7.html)
+- [FileUtils](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FileUtils.html)
+- [File/Directory exists in Java](http://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java)
+
 
 # Errors
 
@@ -79,7 +89,7 @@
 - [Actor not found](http://apache-spark-user-list.1001560.n3.nabble.com/Actor-not-found-td22265.html)
 
 
-
 # TODO
 
 - should surface names be lowercased?
+- collect titles?
