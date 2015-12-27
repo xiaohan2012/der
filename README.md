@@ -72,3 +72,4 @@
 - [Adding Play Json to sbt](http://stackoverflow.com/questions/19436069/adding-play-json-library-to-sbt)
 - [Play Json example](https://www.playframework.com/documentation/2.1.1/ScalaJson)
 - [Five ways to create Scala List](http://alvinalexander.com/scala/how-create-scala-list-range-fill-tabulate-constructors)
+- [Scala Set](http://www.scala-lang.org/docu/files/collections-api/collections_7.html)

@@ -157,6 +157,19 @@ class WikipediaProcessorSpec extends FlatSpec with BeforeAndAfter with Matchers 
       links.toList
     }
   }
+  "WkikipediaProcessor.extractInLinks(fake set)" should "return Seq[(Int, Seq[Int])]" in {
+    val expected_in_links = Set(
+      (WikipediaProcessor.NON_EXIST_ENTITY_ID, Set(1)),
+      (1, Set(3)),
+      (2, Set(1, 3)),
+      (3, Set(2))
+    )
+    expected_in_links should equal {
+      WikipediaProcessor.extractInLinks(sc,
+        sc.parallelize(expected_out_links)
+      ).collect.toSet
+    }
+  }
 
   "WkikipediaProcessor.extractOutLinks(real set)" should "return Seq[(Int, Seq[Int])]" in {
     val links = WikipediaProcessor.extractOutLinks(sc, xml_path_real).collect

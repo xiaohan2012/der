@@ -10,7 +10,7 @@ import org.apache.spark.broadcast.Broadcast
 
 import scala.collection.Map
 import scala.collection.immutable.HashMap
-import scala.collection.mutable.{HashMap => MHashMap}
+import scala.collection.mutable.{HashMap => MHashMap, Set => MSet}
 
 import java.lang.instrument.Instrumentation
 
@@ -181,6 +181,28 @@ object WikipediaProcessor {
 
   def extractOutLinks(sc: SparkContext, xml_path: String): RDD[(Int, Set[Int])] =
     extractOutLinks(sc, xml_path, sc.defaultMinPartitions)
+
+  def extractInLinks(sc: SparkContext, out_links: RDD[(Int, Set[Int])], min_partitions: Int): RDD[(Int, Set[Int])] = {
+    out_links.map {
+      case (source, targets) => {
+        targets map { t => (t, source)}
+      }
+    }
+      .flatMap(identity)
+      .aggregateByKey(
+      MSet[Int]()
+    )((set, source) => {set += source}, // seqOp
+      (s1, s2) => {s1 | s2} // combOp
+    )
+      .map { // to immutable
+      case (target, sources) => {
+        (target, sources.toSet)
+      }
+    }
+  }
+
+  def extractInLinks(sc: SparkContext, out_links: RDD[(Int, Set[Int])]): RDD[(Int, Set[Int])] =
+    extractInLinks(sc, out_links, sc.defaultMinPartitions)
 
   def jsonizeOutLinks(links: RDD[(Int, Set[Int])]): RDD[String] = {
     links.map { 
