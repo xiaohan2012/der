@@ -575,6 +575,14 @@
     </arr>
   </requestHandler>
 
+  <updateRequestProcessorChain>
+	<processor class="solr.UUIDUpdateProcessorFactory">
+	  <str name="fieldName">id</str>
+	</processor>
+	<processor class="solr.LogUpdateProcessorFactory" />
+	<processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
+
   <requestHandler name="/tag" class="org.opensextant.solrtexttagger.TaggerRequestHandler">
 	<lst name="defaults">
       <str name="field">name_tag</str>

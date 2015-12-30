@@ -75,3 +75,4 @@
 - [Scala Set](http://www.scala-lang.org/docu/files/collections-api/collections_7.html)
 - [FileUtils](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FileUtils.html)
 - [File/Directory exists in Java](http://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java)
+- [Solr: automatic generate unique key](http://solr.pl/en/2013/07/08/automatically-generate-document-identifiers-solr-4-x/)
