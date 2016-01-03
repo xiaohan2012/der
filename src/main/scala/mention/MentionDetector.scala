@@ -1,79 +1,38 @@
 package org.hxiao.der.mention
 
-import scala.collection.JavaConversions.{mapAsJavaMap, asScalaIterator, asJavaIterator, asScalaSet}
+import scalaj.http.Http
+import scala.xml.XML
 
-import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer
-import org.apache.solr.common.params.{CommonParams, MapSolrParams}
+case class Mention(id: String, start: Int, end: Int, text: String)
 
-import com.aliasi.chunk.{Chunk, Chunker}
-import com.aliasi.dict.{DictionaryEntry, MapDictionary, ExactDictionaryChunker}
-import com.aliasi.tokenizer.IndoEuropeanTokenizerFactory
+class MentionDetector(val service_url: String){
+  val OK_CODE = 0
 
-import org.hxiao.der.util.SolrUtility
+  def request(text: String): String = 
+    Http(service_url)
+      .method("POST")
+      .header("Content-Type", "text/plain")
+      .postData(text)
+      .asString.body
 
-
-class SolrMapDictionary(
-  val solr: EmbeddedSolrServer, val nrows: Int)
-    extends MapDictionary[String] {
-
-  override def addEntry(entry: DictionaryEntry[String]) = {}
-  
-  override def iterator():
-      java.util.Iterator[DictionaryEntry[String]] = {
-    phraseEntryIt("*:*")
+  def parseResponse(res: String): Seq[Mention] = {
+    val obj = XML.loadString(res)
+    val code = ((obj \ "lst").head \ "int").head.text.toInt
+    if(code != OK_CODE){
+      throw new Exception(s"Error code $code.\n Full message:\n${obj}")
+    }
+    (obj \ "arr" \ "lst").map(
+      e => {
+        Mention(
+          (e \ "arr" \ "str").head.text, // take the first matching surface name
+          (e \ "int").head.text.toInt,
+          (e \ "int").tail.text.toInt,
+          (e \ "str").head.text
+        )
+      })
   }
-  
-  override def phraseEntryIt(phrase: String):
-      java.util.Iterator[DictionaryEntry[String]] = {
-    val params = new MapSolrParams(Map(
-      CommonParams.Q -> phrase,
-      // CommonParams.FQ -> ("nercat:" + category),
-      // CommonParams.FL -> "nerval",
-      CommonParams.START -> "0",
-      CommonParams.ROWS -> String.valueOf(nrows)))
-    val rsp = solr.query(params)
-    rsp.getResults().iterator().toList.map(doc =>  new DictionaryEntry[String](
-      doc.getFieldValue("surface_name").asInstanceOf[String],
-      "",
-      doc.getFieldValue("log_occurrences").asInstanceOf[Double])).
-      iterator
-  }
-}
 
-class DictionaryMentionDetector(dict: MapDictionary[String]){
-  private val chunker = new ExactDictionaryChunker(dict,
-    IndoEuropeanTokenizerFactory.INSTANCE,
-    false, false)
+  def detect(text: String): Seq[Mention] = 
+    parseResponse(request(text))
 
-  def detect(text: String): List[Chunk] =
-    chunker.chunk(text).chunkSet.toList
-
-
-  def mkString(text: String, chunks: List[Chunk]): List[String] = 
-    chunks.map {chunk => text.substring(chunk.start(), chunk.end())}
-
-}
-
-object DictionaryMentionDetector{
-  def main(args: Array[String]) = {
-    val text = args(0)
-    val nrows = args(1)
-
-    val solr_dir = "/cs/home/hxiao/solr"
-    val solr_core_name = "surface_names"
-    val solr_server = SolrUtility.createEmbeddedSolrServer(solr_dir, solr_core_name)
-    val dict = new SolrMapDictionary(solr_server, nrows.toInt)
-
-    println("dict:", dict)
-
-    val detector = new DictionaryMentionDetector(dict)
-    val chunks = detector.detect(text)
-    
-    println("text:", text)
-    println("chunks:", chunks)
-    println("result:", detector.mkString(text, chunks).sorted)
-
-    solr_server.shutdown()
-
-  }
 }

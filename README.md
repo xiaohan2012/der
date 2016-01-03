@@ -82,14 +82,13 @@
 - [FileUtils](https://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/FileUtils.html)
 - [File/Directory exists in Java](http://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java)
 - Lucene -- format version not supported: remove the `data` directory under `resources/solr/{core_name}`
-
-# Errors
-
-- Error writing stream to file `stderr`, stream closed
-- [Actor not found](http://apache-spark-user-list.1001560.n3.nabble.com/Actor-not-found-td22265.html)
+- [Solr: automatic generate unique key](http://solr.pl/en/2013/07/08/automatically-generate-document-identifiers-solr-4-x/)
+- [Bash: XML pretty print](http://stackoverflow.com/questions/16090869/how-to-pretty-print-xml-from-the-command-line)
+- [scala sys](http://www.scala-lang.org/api/2.11.5/index.html#scala.sys.process.package)
 
 
 # TODO
 
 - should surface names be lowercased?
 - collect titles?
+

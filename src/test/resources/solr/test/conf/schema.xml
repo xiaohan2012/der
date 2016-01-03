@@ -78,7 +78,10 @@
 		<filter class="solr.LowerCaseFilterFactory" />
 	  </analyzer>
 	</fieldType>
+	<fieldType name="uuid" class="solr.UUIDField" indexed="true" />
 
+	<uniqueKey>id</uniqueKey>
+	<field name="id" type="uuid" indexed="true" stored="true" required="true"/>
 	<field name="_version_" type="long" indexed="true" stored="true"/>
 	<field name="surface_name" type="tag" indexed="true" stored="true"/>
 	<field name="occurrences" type="int" indexed="false" stored="true"/>

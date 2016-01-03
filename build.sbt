@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "org.apache.solr" % "solr-solrj" % "5.2.0",
   "org.apache.solr" % "solr-core" % "5.2.0",
   "org.opensextant" % "solr-text-tagger" % "2.2",
-  "play" % "play_2.10" % "2.1.0"
+  "play" % "play_2.10" % "2.1.0",
+  "org.scalaj" %% "scalaj-http" % "2.2.0"
 )
 
 
