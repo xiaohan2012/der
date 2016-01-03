@@ -575,6 +575,15 @@
     </arr>
   </requestHandler>
 
+  <!-- Legacy config for the admin interface -->
+  <admin>
+    <defaultQuery>*:*</defaultQuery>
+  </admin>
+
+
+  <!-- mystuff
+  to be copied
+  -->
   <updateRequestProcessorChain>
 	<processor class="solr.UUIDUpdateProcessorFactory">
 	  <str name="fieldName">id</str>
@@ -583,16 +592,31 @@
 	<processor class="solr.RunUpdateProcessorFactory" />
   </updateRequestProcessorChain>
 
-  <requestHandler name="/tag" class="org.opensextant.solrtexttagger.TaggerRequestHandler">
+  <requestHandler name="/tag" class="org.opensextant.solrtexttagger.TaggerRequestHandler">	
 	<lst name="defaults">
-      <str name="field">name_tag</str>
-      <str name="fq">PUT SOME SOLR QUERY HERE; OPTIONAL</str><!-- filter out -->
+      <str name="field">surface_name</str>
+      <str name="fq">*:*</str>
 	</lst>
   </requestHandler>
-  
-  <!-- Legacy config for the admin interface -->
-  <admin>
-    <defaultQuery>*:*</defaultQuery>
-  </admin>
 
+  
+
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-analyzers-common/jars/" regex="lucene-analyzers-common-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-analyzers-kuromoji/jars/" regex="lucene-analyzers-kuromoji-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-analyzers-phonetic/jars/" regex="lucene-analyzers-phonetic-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-backward-codecs/jars/" regex="lucene-backward-codecs-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-codecs/jars/" regex="lucene-codecs-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-core/jars/" regex="lucene-core-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-expressions/jars/" regex="lucene-expressions-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-grouping/jars/" regex="lucene-grouping-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-highlighter/jars/" regex="lucene-highlighter-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-join/jars/" regex="lucene-join-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-memory/jars/" regex="lucene-memory-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-misc/jars/" regex="lucene-misc-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-queries/jars/" regex="lucene-queries-5.2.1.jar" />
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-queryparser/jars/" regex="lucene-queryparser-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-sandbox/jars/" regex="lucene-sandbox-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-spatial/jars/" regex="lucene-spatial-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.apache.lucene/lucene-suggest/jars/" regex="lucene-suggest-5.2.1.jar"/>
+  <lib dir="/home/hxiao/.ivy2/cache/org.opensextant/solr-text-tagger/jars/" regex="solr-text-tagger-2.2.jar"/>
 </config>
